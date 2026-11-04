@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+  name: kubernetesterraformpoc-api
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: kubernetesterraformpoc-api
+
+  template:
+
+    metadata:
+      labels:
+        app: kubernetesterraformpoc-api
+
+    spec:
+
+      containers:
+
+      - name: api
+
+        image: kubernetesterraformpoc:v1
+
+        imagePullPolicy: Never
+
+        ports:
+        - containerPort: 8080
+
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
